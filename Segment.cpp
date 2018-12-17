@@ -3,11 +3,20 @@
 //
 
 #include "Segment.h"
-Segment::Segment(Point p1, Point p2) {
-    s = p1;e = p2;
+Segment::Segment(Point p1, Point p2, int traj_id) {
+    s = p1;e = p2;cluster_id = -1;
+    this->traj_id = traj_id;
 }
 std::pair<Point, Point> Segment::getSegment() {
     return std::make_pair(s,e);
+}
+
+void const Segment::setClusterId(int cluster_id){
+    this->cluster_id = cluster_id;
+}
+
+int const Segment::getClusterId(){
+    return this->cluster_id;
 }
 
 double const Segment::perpendicular_dist(Segment seg) {
@@ -47,4 +56,11 @@ double const Segment::angle_dist(Segment seg) {
 }
 double Segment::getSegmentLength() {
     return sqrt(pow(s.getX() - e.getX(), 2) +pow(s.getY() - e.getY(), 2));
+}
+
+double const Segment::getAllDistance(Segment seg){
+    return this->perpendicular_dist(seg) + this->parallel_dist(seg) + this->angle_dist(seg);
+}
+int const Segment::getTrajId(){
+    return traj_id;
 }

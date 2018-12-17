@@ -13,13 +13,20 @@
 class Segment{
 private:
     Point s,e;
+    int cluster_id;
+    int traj_id;
+
 public:
     Segment(){}
-    Segment(Point p1,Point p2);
+    Segment(Point p1,Point p2,int traj_id);
     std::pair<Point,Point> getSegment();
+    void const setClusterId(int cluster_id);
+    int const getClusterId();
+    int const getTrajId();
     double const perpendicular_dist(Segment seg); // 两个线段的垂直距离
     double const parallel_dist(Segment seg);
     double const angle_dist(Segment seg);
     double getSegmentLength();
+    double const getAllDistance(Segment seg);
 };
 #endif //TRACLUS_SEGMENT_H

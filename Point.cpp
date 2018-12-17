@@ -10,9 +10,10 @@
 Point::Point() {
 
 }
-Point::Point(double a, double b) {
+Point::Point(double a, double b,int traj_id) {
     this->x = a;     // this should be ->
     this->y = b;
+    this->traj_id = traj_id;
 }
 double const Point::dist(Point p){
     return sqrt(pow(x - p.x,2) + pow(y - p.y,2));
@@ -31,21 +32,21 @@ std::pair<double ,double> Point::getPoint() {
 }
 Point const operator + (const Point &a, const Point &b) {
 
-    return Point(a.x + b.x, a.y + b.y);
+    return Point(a.x + b.x, a.y + b.y,-1);
 }
 
 Point const operator - (const Point &a, const Point &b) {
 
-    return Point(a.x - b.x, a.y - b.y);
+    return Point(a.x - b.x, a.y - b.y,-1);
 }
 
 Point const operator * (const double &a,const Point &p){
-    return Point(p.x * a, p.y* a);
+    return Point(p.x * a, p.y* a,-1);
 }
 
 
 Point const operator * (const Point &p,const double &a){
-    return Point(p.x * a, p.y* a);
+    return Point(p.x * a, p.y* a,-1);
 }
 
 bool const operator == (const Point &p1,const Point &p2){

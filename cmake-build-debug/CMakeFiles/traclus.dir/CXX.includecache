@@ -59,4 +59,10 @@ string
 -
 vector
 -
+queue
+-
+map
+-
+set
+-
 

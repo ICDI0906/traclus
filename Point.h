@@ -10,9 +10,10 @@ class Point{
     private:
         double x;
         double y;
+        int traj_id;
     public:
         Point();
-        Point(double x,double y);
+        Point(double x,double y,int traj_id);
         double getX();
         double getY();
         std::pair<double,double>getPoint();
