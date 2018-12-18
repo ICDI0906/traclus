@@ -15,7 +15,7 @@ vector<vector<Point>> db;
 set<Segment*> partitionDB; // 线段的集合
 map<int,set<int>> cluster_cnt;
 double eplison = 10;
-int minLins = 5;
+int minLins = 20;
 /*
  * 测试一下距离公式
  */
@@ -60,8 +60,8 @@ void approximate_trajectory_partitioning(){
             int currIndex = start_index + length;
             double cost_par = MDL(i,start_index, currIndex, "par");
             double cost_nopar = MDL(i,start_index, currIndex, "nopar");
-            cout << "start_index：" << start_index << "  currIndex: " << currIndex << " " << cost_par
-                 << "  par and nopar  " << cost_nopar << endl;
+//            cout << "start_index：" << start_index << "  currIndex: " << currIndex << " " << cost_par
+//                 << "  par and nopar  " << cost_nopar << endl;
             if (cost_par > cost_nopar) {
                 Segment *seg = new Segment(db[i][start_index],db[i][currIndex - 1],i);
                 partitionDB.insert(seg);
@@ -105,8 +105,8 @@ queue<Segment*> n_eplison_l(Segment seg){
 void expand_cluster(queue<Segment*> que,int cluster_id){
     while(!que.empty()){
         Segment * front = que.front();
-        front->setClusterId(cluster_id);
         que.pop();
+        front->setClusterId(cluster_id);
         queue<Segment*> tmp_que = n_eplison_l(*front);
         if(tmp_que.size() >= minLins){
             while(!tmp_que.empty()){
@@ -114,6 +114,7 @@ void expand_cluster(queue<Segment*> que,int cluster_id){
                 tmp_que.pop();
                 if(tmp_front->getClusterId() == -1){
                     que.push(tmp_front);
+                    tmp_front->setClusterId(cluster_id);
                 }
             }
         }
@@ -133,8 +134,8 @@ void line_segment_clustering(){
                 cluster_id ++;
             }
         }
+//        cout <<cluster_id << " "<< seg->getClusterId()<<endl;
         cluster_cnt[seg->getClusterId()].insert(seg->getTrajId());
-
     }
 //    map<int,set<int>>::iterator iter;
     set<int>remove_cluster;
@@ -153,10 +154,11 @@ void line_segment_clustering(){
     }
 }
 int main() {
-    freopen("deer1995.tra","r",stdin);
+//    freopen("deer1995.tra","r",stdin);
 //    freopen("elk_1993.tra","r",stdin);
 //    freopen("deer1995.tra","r",stdin);
 //    freopen("mini_data.in","r",stdin);
+    freopen("hurricane1950_2006.tra","r",stdin);
     freopen("data.out","w",stdout);
     cin>> dim >> traj_n;
     for(int i=0;i<traj_n;i++){

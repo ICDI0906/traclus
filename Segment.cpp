@@ -62,5 +62,5 @@ double const Segment::getAllDistance(Segment seg){
     return this->perpendicular_dist(seg) + this->parallel_dist(seg) + this->angle_dist(seg);
 }
 int const Segment::getTrajId(){
-    return traj_id;
+    return this->traj_id;
 }
