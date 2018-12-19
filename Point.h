@@ -14,8 +14,8 @@ class Point{
     public:
         Point();
         Point(double x,double y,int traj_id);
-        double getX();
-        double getY();
+        double const getX();
+        double const getY();
         std::pair<double,double>getPoint();
         double const dist(Point p);
         // operator
@@ -23,6 +23,7 @@ class Point{
         friend const Point operator - (const Point &a, const Point &b);
         friend const Point operator * (const double &a,const Point &p);
         friend const Point operator * (const Point &p,const double &a);
+        friend const Point operator / (const Point &p,const double &a);
         double const dot(const Point &p);
         friend const bool operator == (const Point &p1,const Point &p2);
 //        std::ostream& operator<<(std::ostream& cout,const Point& p)

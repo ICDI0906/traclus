@@ -26,6 +26,7 @@ public:
     double const perpendicular_dist(Segment seg); // 两个线段的垂直距离
     double const parallel_dist(Segment seg);
     double const angle_dist(Segment seg);
+    void const setSegment(Point p,Point q);
     double getSegmentLength();
     double const getAllDistance(Segment seg);
 };

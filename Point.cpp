@@ -21,11 +21,11 @@ double const Point::dist(Point p){
 Point::~Point() {
 
 }
-double Point::getX() {
-    return x;
+double const Point::getX() {
+    return this->x;
 }
-double Point::getY() {
-    return y;
+double const Point::getY() {
+    return this->y;
 }
 std::pair<double ,double> Point::getPoint() {
     return std::make_pair(x,y);
@@ -47,6 +47,10 @@ Point const operator * (const double &a,const Point &p){
 
 Point const operator * (const Point &p,const double &a){
     return Point(p.x * a, p.y* a,-1);
+}
+
+Point const operator / (const Point &p,const double &a){
+    return Point(p.x / a, p.y / a,-1);
 }
 
 bool const operator == (const Point &p1,const Point &p2){

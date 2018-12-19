@@ -64,3 +64,6 @@ double const Segment::getAllDistance(Segment seg){
 int const Segment::getTrajId(){
     return this->traj_id;
 }
+void const Segment::setSegment(Point p, Point q) {
+    this->s = p;this->e = q;
+}
