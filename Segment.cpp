@@ -3,6 +3,7 @@
 //
 
 #include "Segment.h"
+const double eps = 1e-12;
 Segment::Segment(Point p1, Point p2, int traj_id) {
     s = p1;e = p2;cluster_id = -1;
     this->traj_id = traj_id;
@@ -29,7 +30,12 @@ double const Segment::perpendicular_dist(Segment seg) {
     Point pe = s + u2 * (e - s);
     double l1 = seg.s.dist(ps);
     double l2 = seg.e.dist(pe);
-    return (pow(l1,2) + pow(l2,2)) / (l1 + l2);
+    if (l1 < eps && l2 < eps){
+        return 0;
+    }
+    else {
+        return (pow(l1, 2) + pow(l2, 2)) / (l1 + l2);
+    }
 }
 double const Segment::parallel_dist(Segment seg) {
     //
@@ -46,8 +52,9 @@ double const Segment::parallel_dist(Segment seg) {
 double const Segment::angle_dist(Segment seg) {
     //
     Point tmp = e - s;
+
     double cos_theta = tmp.dot(seg.e - seg.s) / (e.dist(s) * seg.e.dist(seg.s));
-    if (cos_theta > 0){ // theta < 90
+    if (cos_theta > eps){ // theta < 90
         return seg.getSegmentLength() * sqrt(1 - pow(cos_theta ,2));
     }
     else{
@@ -59,7 +66,16 @@ double Segment::getSegmentLength() {
 }
 
 double const Segment::getAllDistance(Segment seg){
-    return this->perpendicular_dist(seg) + this->parallel_dist(seg) + this->angle_dist(seg);
+    double result = this->angle_dist(seg);// 论文中定义两个相连线段之间的平行距离为0
+    if(!(this->getSegment().second == seg.getSegment().first || this->getSegment().first == seg.getSegment().second)){
+//        std::cout << "in parallel_dist"<<std::endl;
+        result += this->parallel_dist(seg);
+    }
+    if(this->getTrajId()!=seg.getTrajId()){
+//        std::cout << this->getTrajId() <<" "<< seg.getTrajId() <<std::endl;
+        result += this->perpendicular_dist(seg);
+    }
+    return  result;
 }
 int const Segment::getTrajId(){
     return this->traj_id;

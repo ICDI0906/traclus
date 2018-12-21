@@ -16,10 +16,11 @@ set<Segment*> partitionDB; // 线段的集合
 map<int,set<int>> cluster_cnt;
 vector<vector<Point*>> representive_point;
 vector<vector<Segment*>> seg_global;
-double eplison = 35;
+double eplison = 30;
 int minLins = 8;
-int min_traj = 8;
-double min_dist = 10;
+int min_traj = 10;
+double min_dist = 30;
+double constant = 5.0;
 /*
  * 测试一下距离公式
  */
@@ -35,7 +36,12 @@ double MDL(int traj_id, int start_index,int currIndex,string t){
     Segment se = Segment(db[traj_id][start_index],db[traj_id][currIndex],traj_id);
     double l_h = 0.0,l_d_h_l = 0.0,l_d_h_r = 0.0;
     if(t == "par") {
-        l_h = log2(se.getSegmentLength());
+        if(se.getSegmentLength()< eps) {
+            l_h = 0;
+        }
+        else {
+            l_h = log2(se.getSegmentLength());
+        }
     }
     for(int i = start_index ; i < currIndex;i++){
         Segment sub = Segment(db[traj_id][i] , db[traj_id][i + 1], traj_id);
@@ -48,10 +54,23 @@ double MDL(int traj_id, int start_index,int currIndex,string t){
         }
     }
     if(t == "par"){
-        return l_h + log2(l_d_h_l) + log2(l_d_h_r);
+//        cout << l_h <<" "<< l_d_h_l << "  "<< (l_d_h_r)<< endl;
+        if(l_d_h_l > eps){
+            l_h += log2(l_d_h_l);
+        }
+        if(l_d_h_r > eps){
+            l_h += log2(l_d_h_r);
+        }
+        return l_h;
     }
     else{
-        return log2(l_h);
+
+        if(l_h < eps){
+            return 0;
+        }
+        else {
+            return log2(l_h);
+        }
     }
 }
 void approximate_trajectory_partitioning(){
@@ -65,7 +84,8 @@ void approximate_trajectory_partitioning(){
             double cost_nopar = MDL(i,start_index, currIndex, "nopar");
 //            cout << "start_index：" << start_index << "  currIndex: " << currIndex << " " << cost_par
 //                 << "  par and nopar  " << cost_nopar << endl;
-            if (cost_par > cost_nopar) {
+//            cout << cost_par <<" compare "<< cost_nopar<< endl;
+            if (cost_par > cost_nopar + constant) {
                 Segment *seg = new Segment(db[i][start_index],db[i][currIndex - 1],i);
                 partitionDB.insert(seg);
                 start_index = currIndex - 1;
@@ -73,6 +93,8 @@ void approximate_trajectory_partitioning(){
                 length++;
             }
         }
+        Segment *seg = new Segment(db[i][start_index],db[i][seq.size() - 1],i);
+        partitionDB.insert(seg);
     }
 //    cout << partitionDB.size() << "size :" <<endl;
 }
@@ -276,7 +298,7 @@ int main() {
 //    freopen("deer1995.tra","r",stdin);
 //    freopen("mini_data.in","r",stdin);
     freopen("hurricane1950_2006.tra","r",stdin);
-    freopen("data.out","w",stdout);
+    freopen("/Users/icdi/Desktop/py_ws/MachineLearning/traclus/data_out","w",stdout);
     cin>> dim >> traj_n;
     for(int i=0;i<traj_n;i++){
         int traj_id,point_num;
